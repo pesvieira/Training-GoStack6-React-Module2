@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: row;
   justify-content: center;
 
-  margin-top: 0;
+  margin-top: 50px;
 
 `;
 
@@ -13,12 +13,31 @@ export const Repository = styled.div`
   width: 250px;
   background: #FFF;
   border-radius: 3px;
-  margin: 0;
 
   display: flex;
   flex-direction: column;
 
+  margin: 20px;
+
   header {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 64px;
+    }
+
+    strong {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    small {
+      font-size: 14px;
+      color: #666;
+    }
 
   }
 
