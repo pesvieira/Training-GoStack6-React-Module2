@@ -17,6 +17,40 @@ export default class Main extends Component {
     repositories: [],
   };
 
+  componentDidMount() {
+    const repos = JSON.parse(localStorage.getItem('repositories'));
+    if (repos != null) {
+      this.setState({ repositories: repos });
+    }
+  }
+
+  handleDeleteRepository = (id) => {
+    this.setState({
+      repositories: this.state.repositories.filter(repos => repos.id !== id),
+    });
+
+    localStorage.setItem('repositories', JSON.stringify(this.state.repositories));
+  }
+
+  handleRefreshRepository = async (id) => {
+    const repos = this.state.repositories.find(rep => rep.id === id);
+
+    try {
+      const { data } = await api.get(`/repos/${repos.full_name}`);
+      const lastcommit = moment(data.pushed_at).fromNow();
+
+      data.lastCommit = lastcommit;
+
+      this.setState({
+        repositories: this.state.repositories.map(repo => (repo.id === data.id ? data : repo)),
+      });
+
+      localStorage.setItem('repositories', JSON.stringify(this.state.repositories));
+    } catch (err) {
+      this.setState({ repositoryError: true });
+    }
+  }
+
   handleAddRepository = async (e) => {
     e.preventDefault();
 
@@ -32,6 +66,8 @@ export default class Main extends Component {
         repositoryInput: '',
         repositories: [...this.state.repositories, response.data],
       });
+
+      localStorage.setItem('repositories', JSON.stringify(this.state.repositories));
     } catch (err) {
       this.setState({ repositoryError: true });
     } finally {
@@ -57,7 +93,11 @@ export default class Main extends Component {
           <button type="submit">{this.state.loading ? <i className="fa fa-spinner fa-pulse" /> : 'OK'}</button>
         </Form>
 
-        <CompareList repositories={this.state.repositories} />
+        <CompareList
+          repositories={this.state.repositories}
+          onDeleteClick={this.handleDeleteRepository}
+          onRefreshClick={this.handleRefreshRepository}
+        />
       </Container>
     );
   }

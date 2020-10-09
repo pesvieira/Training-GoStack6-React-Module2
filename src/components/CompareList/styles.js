@@ -55,6 +55,12 @@ export const Repository = styled.div`
         font-style: italic;
       }
 
+      button {
+        margin-right: 20px;
+        background: #63f5b0;
+        padding: 3px;
+      }
+
       &:nth-child(2n-1) {
         background: #f5f5f5;
       }
