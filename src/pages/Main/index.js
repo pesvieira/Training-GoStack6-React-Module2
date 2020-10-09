@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import api from '../../services/api';
@@ -18,7 +19,10 @@ export default class Main extends Component {
 
     try {
       const response = await api.get(`/repos/${this.state.repositoryInput}`);
-      console.log(response);
+      this.setState({
+        repositoryInput: '',
+        repositories: [...this.state.repositories, response.data],
+      });
     } catch (err) {
       console.log(err);
     }
